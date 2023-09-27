@@ -1,0 +1,78 @@
+import random
+
+def generate_brackets(entrants, num_brackets):
+    if len(entrants) < num_brackets * 8:
+        print("Error: Not enough entrants for the specified number of brackets.")
+        return None
+
+    # Create a dictionary to group entrants by tag
+    entrants_by_tag = {}
+    for entrant in entrants:
+        tag = entrant["tag"]
+        if tag in entrants_by_tag:
+            entrants_by_tag[tag].append(entrant)
+        else:
+            entrants_by_tag[tag] = [entrant]
+
+    # Create brackets while ensuring that entrants with the same tag are not placed together
+    for bracket_num in range(num_brackets):
+        print(f"Bracket {bracket_num + 1}:")
+
+        bracket_entrants = []  # Entrants in this bracket
+        used_tags = set()     # Tags that have already been used
+
+        while len(bracket_entrants) < 8:
+            # Choose a random tag that hasn't been used in this bracket
+            available_tags = list(set(entrants_by_tag.keys()) - used_tags)
+            if not available_tags:
+                print("Error: Unable to create a valid bracket.")
+                return None
+            selected_tag = random.choice(available_tags)
+
+            # Choose a random entrant from the selected tag and add them to the bracket
+            selected_entrant = random.choice(entrants_by_tag[selected_tag])
+            bracket_entrants.append(selected_entrant)
+
+            # Remove the selected entrant from the list of available entrants
+            entrants_by_tag[selected_tag].remove(selected_entrant)
+
+            # Mark the tag as used in this bracket
+            used_tags.add(selected_tag)
+
+        # Create the first round pairings for this bracket
+        for match_num in range(4):
+            match = [bracket_entrants[match_num * 2], bracket_entrants[match_num * 2 + 1]]
+            print(f"Match {match_num + 1}: {match[0]['tag']} vs. {match[1]['tag']}")
+
+if __name__ == "__main__":
+    # List of entrants with tags (change this to your list of entrants with tags)
+    entrants = [
+        {"tag": "Player1"},
+        {"tag": "Player2"},
+        {"tag": "Player3"},
+        {"tag": "Player4"},
+        {"tag": "Player5"},
+        {"tag": "Player6"},
+        {"tag": "Player7"},
+        {"tag": "Player8"},
+        {"tag": "Player9"},
+        {"tag": "Player10"},
+        {"tag": "Player11"},
+        {"tag": "Player12"},
+        {"tag": "Player13"},
+        {"tag": "Player14"},
+        {"tag": "Player15"},
+        {"tag": "Player16"},
+        {"tag": "Player17"},
+        {"tag": "Player18"},
+        {"tag": "Player19"},
+        {"tag": "Player20"},
+        {"tag": "Player21"},
+        {"tag": "Player22"},
+        {"tag": "Player23"},
+        {"tag": "Player24"}
+    ]
+
+    num_brackets = 3  # Specify the number of brackets you want
+
+    generate_brackets(entrants, num_brackets)
